@@ -58,7 +58,7 @@ class CoreMotionModule: NSObject {
             for s in sorted {
                 if  s.acc > 0.2 && s.date.timeIntervalSince1970 > ts {
                     filtered.append(s)
-                    ts += 500 // Adding 500ms
+                    ts += 0.5 // Adding 500ms == 0.5s
                 }
             }
             resolve(filtered.map({ $0.toDictionary() }))
