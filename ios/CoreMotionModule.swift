@@ -35,7 +35,7 @@ class CoreMotionModule: NSObject {
                 let acc = data.acceleration
                 let linear = self.linearAcc(acceleration: acc)
                 var state : DeviceState
-                if acc.z > 0.1 {
+                if acc.y > 0.05   {
                     state = .up
                 } else {
                     state = .down
@@ -43,7 +43,7 @@ class CoreMotionModule: NSObject {
                 return DeviceMotionData(
                     date: data.startDate,
                     state: state,
-                    x: acc.z,
+                    x: acc.x,
                     y: acc.y,
                     z: acc.z,
                     acc: linear
@@ -56,7 +56,9 @@ class CoreMotionModule: NSObject {
             var filtered:[DeviceMotionData] = []
             var ts = sorted.first?.date.timeIntervalSince1970 ?? 0
             for s in sorted {
-                if  s.acc > 0.2 && s.date.timeIntervalSince1970 > ts {
+                let last = filtered.last
+                if  s.acc > 1.02 && s.date.timeIntervalSince1970 > ts && last?.state != s.state {
+//                    print("\(s.acc) \(s.x) \(s.y) \(s.z) \(s.state)")
                     filtered.append(s)
                     ts += 0.5 // Adding 500ms == 0.5s
                 }

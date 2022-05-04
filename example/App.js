@@ -22,9 +22,12 @@ export default class App extends Component<{}> {
     CoreMotionModule.isAvailable((available) => {
       if (available) {
         CoreMotionModule.recordMotions()
-        CoreMotionModule.loadRecordedData()
-          .then((resolve) => this.setState({ status: "OK", message: "Count: " + resolve.length, sample: JSON.stringify(resolve[0]) }))
-          .catch((error) => this.setState({ status: error.message }));
+        setInterval(()=>
+          CoreMotionModule.loadRecordedData()
+            .then((resolve) => this.setState({ status: "OK", message: "Count: " + resolve.length, sample: JSON.stringify(resolve[0]) }))
+            .catch((error) => this.setState({ status: error.message })), 
+          3000
+        );
       }
     })
   }
